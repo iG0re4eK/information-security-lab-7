@@ -77,6 +77,11 @@ class FermaFactorization {
         return;
       }
 
+      while (n % 2 === 0) {
+        this.primeNumbers.push(2);
+        n = Math.floor(n / 2);
+      }
+
       s = this.calculateS(n);
 
       this.steps.push(`${stepPrefix}Начинаем факторизацию n = ${n}`);
@@ -131,6 +136,11 @@ class FermaFactorization {
         this.steps.push(`${stepPrefix}n = ${n} является простым`);
         this.primeNumbers.push(n);
         return;
+      }
+
+      while (n % 2n === 0n) {
+        this.primeNumbers.push(2n);
+        n = n / 2n;
       }
 
       s = this.calculateBigIntS(n);
