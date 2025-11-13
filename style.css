@@ -17,6 +17,13 @@
   --color-secondary: #b67000;
 }
 
+.field-error {
+  outline: 2px solid rgb(162, 49, 49);
+  background-color: rgb(255, 148, 148);
+  color: rgb(105, 0, 0);
+  box-shadow: 0 0 20px red;
+}
+
 body {
   background-color: rgb(20, 20, 20);
 }
@@ -29,7 +36,11 @@ body {
 
 section {
   color: var(--color-text);
-  margin: 4rem 0;
+  min-height: 100vh;
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 header {
@@ -78,7 +89,7 @@ h2.current-step::before {
 
 h3 {
   border-radius: 1rem 0 0 1rem;
-  margin: 1rem 0;
+  margin: 2rem 0;
 
   padding: 0.5rem;
   padding-left: 1rem;
@@ -96,6 +107,7 @@ h3 {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  position: relative;
 
   input {
     height: 2.5rem;
@@ -113,15 +125,21 @@ h3 {
   .input-content {
     display: flex;
     gap: 2rem;
+    align-items: flex-start;
 
     details {
-      position: relative;
+      position: absolute;
+      top: 6rem;
+      left: 20rem;
+      width: 250px;
       border-radius: 0.5rem;
       background-color: var(--color-secondary);
       display: flex;
       flex-direction: column;
       justify-content: center;
       padding: 0.6rem;
+      z-index: 10;
+      margin-top: 0.5rem;
 
       a {
         text-decoration: none;
@@ -132,6 +150,11 @@ h3 {
       summary {
         cursor: pointer;
         color: var(--color-text);
+        list-style: none;
+      }
+
+      summary::-webkit-details-marker {
+        display: none;
       }
 
       .generate-content {

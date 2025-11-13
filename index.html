@@ -15,7 +15,7 @@
     <main>
       <div class="wrapper">
         <section class="input-section">
-          <h2 class="current-step">1) Нам нужно простое число p.</h2>
+          <h2>1) Нам нужно простое число p.</h2>
           <div class="input-content">
             <label for="pValueField"
               >p =
@@ -35,7 +35,7 @@
                       type="number"
                       placeholder="Количество бит"
                       id="bitValue"
-                      min="3"
+                      min="11"
                       max="21"
                       value="21"
                   /></label>
@@ -63,6 +63,7 @@
             <span>g<sup>p-1</sup> mod p</span>
             являются различными и образуют <span>{1, ..., p-1}</span>
           </p>
+          <button class="next-btn">Дальше</button>
         </section>
         <section class="key-generation-section">
           <h2>3) Генерация ключей для Алисы и Боба</h2>
@@ -109,7 +110,8 @@
             </div>
           </div>
 
-          <button class="generate-keys-btn">Сгенерировать ключи</button>
+          <button class="generate-keys-btn">Сгенерировать ключи</button
+          ><button class="next-btn">Дальше</button>
         </section>
 
         <section>

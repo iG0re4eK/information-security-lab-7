@@ -1,9 +1,27 @@
-class RobinMiller {
-  constructor(bit, pField) {
+class RobinMillerAlg {
+  constructor(bit) {
     this.bit = bit;
-    this.pField = pField;
     this.minA = null;
     this.maxA = null;
+  }
+
+  setBit(bit) {
+    if (bit === null) return false;
+    if (typeof bit !== "number") return false;
+    if (!Number.isInteger(bit)) return false;
+    if (bit < 3 || bit > 21) return false;
+    this.bit = bit;
+    return true;
+  }
+
+  maxNumberBit(size) {
+    let result = [];
+
+    for (let i = 0; i < size; i++) {
+      result.push("1");
+    }
+
+    return parseInt(result.join(""), 2);
   }
 
   randomNumberBit(size) {
@@ -103,12 +121,12 @@ class RobinMiller {
     return [b, m];
   }
 
-  rabinMiller(pValue, testCount) {
+  rabinMiller(pValue, testCount = 5) {
     let [b, m] = this.mValueAndValueB(pValue);
 
-    console.log(`a ∈ [${this.minA}, ${this.maxA}]`);
+    this.setIntervalA(2, pValue);
 
-    let testPassed = false;
+    console.log(`a ∈ [${this.minA}, ${this.maxA}]`);
 
     for (let i = 0; i < testCount; i++) {
       console.log(`Тест: ${i}`);
@@ -119,13 +137,15 @@ class RobinMiller {
 
       let z = this.sumMod(a, m, pValue);
 
+      let testPassed = false;
+
       console.log(
         `Вычисляем z = a<sup>m</sup> mod p = ${a}<sup>${m}</sup> mod ${pValue} = ${z}`
       );
 
       if (z === 1 || z === pValue - 1) {
         console.log(`✅ z = ${z} (равно 1 или p-1), тест пройден`);
-        testPassed = true;
+        continue;
       } else {
         console.log(`z = ${z} (не равно 1 или p-1), продолжаем проверку`);
 
@@ -146,46 +166,31 @@ class RobinMiller {
 
           if (j > 0 && z === 1) {
             console.log(`❌ j > 0 (j = ${j}) и z = 1, тест НЕ пройден`);
-            break;
+            return false;
           }
 
           if (j === b - 1 && z !== pValue - 1) {
             console.log(
               `❌ j = b-1 (j = ${j}) и z ≠ p-1 (z = ${z}), тест НЕ пройден`
             );
-            break;
+            return false;
           }
         }
       }
-
-      console.log(testPassed ? `Тест ${i + 1} ✅` : `Тест ${i + 1} ❌`);
+      if (!testPassed) {
+        return false;
+      }
     }
 
-    console.log(
-      testPassed
-        ? `<div class="row"><h3>Все ${testCount} тестов завершены.</h3> <h3>Вероятность составного числа: ${Math.pow(
-            1 / 4,
-            testCount
-          )}</h3> </div>`
-        : `<h3>${testCount} не пройден(о)</h3>`
-    );
-
-    if (!testPassed) {
-      console.log(
-        "-------------------------------------------------------------------------------------------"
-      );
-
-      this.generatePrimeNumberRabinMiller();
-      return;
-    } else {
-      this.pField.value = pValue;
-    }
+    return true;
   }
 
-  generatePrimeNumberRabinMiller() {
+  generatePrimeNumber() {
     let bitValue = Number(this.bit);
     let p = this.randomNumberBit(bitValue);
     console.log("p =", p);
+    let maxBitNumber = this.maxNumberBit(bitValue);
+    console.log(`p не должно превышать: ${maxBitNumber}`);
 
     let maxPrime = 2000;
     let arrayPrime = [];
@@ -196,16 +201,13 @@ class RobinMiller {
     while (!this.checkValidP(p, arrayPrime)) {
       p += 2;
 
-      if (p > 2097151) {
-        this.generatePrimeNumberRabinMiller();
-        return;
+      if (p > maxBitNumber) {
+        return this.generatePrimeNumber();
       }
     }
 
-    this.setIntervalA(2, p);
-
-    this.rabinMiller(p, 5);
+    return p;
   }
 }
 
-export { RobinMiller };
+export { RobinMillerAlg };
