@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ИБ | лаб | 7</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="wrapper">
+        <h1>Алгоритм обмена ключей Диффи-Хэллмана</h1>
+      </div>
+    </header>
+    <main>
+      <div class="wrapper">
+        <section class="input-section">
+          <h2 class="current-step">1) Нам нужно простое число p.</h2>
+          <div class="input-content">
+            <label for="pValueField"
+              >p =
+              <input
+                type="text"
+                id="pValueField"
+                placeholder="Введите простое число"
+            /></label>
+
+            <details>
+              <summary>Сгенерировать по Rabin-Miller</summary>
+              <div class="generate-content">
+                <div class="content">
+                  <label for="bitValue"
+                    >Кол-во бит:
+                    <input
+                      type="number"
+                      placeholder="Количество бит"
+                      id="bitValue"
+                      min="3"
+                      max="21"
+                      value="21"
+                  /></label>
+
+                  <button id="generateBtn" class="generate-btn">
+                    <img src="./img/dice.png" alt="" />
+                  </button>
+                </div>
+
+                <a
+                  href="https://ig0re4ek.github.io/information-security-lab-5/"
+                  target="_blank"
+                  >Что такое алгоритм Robin-Miller?</a
+                >
+              </div>
+            </details>
+          </div>
+          <button class="next-btn">Дальше</button>
+        </section>
+        <section>
+          <h2>2) Далее нам нужно найти g. Это примитивный корень числа p.</h2>
+          <p>
+            g является примитивным корнем простого числа p, если числа g mod p,
+            <span>g<sup>2</sup> mod p</span>, ...,
+            <span>g<sup>p-1</sup> mod p</span>
+            являются различными и образуют <span>{1, ..., p-1}</span>
+          </p>
+        </section>
+        <section class="key-generation-section">
+          <h2>3) Генерация ключей для Алисы и Боба</h2>
+          <p>
+            Алиса и Боб генерируют свои пары ключей для безопасного обмена
+            информацией:
+          </p>
+
+          <div class="keys-container">
+            <div class="user-keys">
+              <h3>3.1 Ключи Алисы</h3>
+              <div class="key-pair">
+                <div class="key-item">
+                  <label>Выбор числа X<sub>a</sub> (закрытый ключ)</label>
+                  <p>X<sub>a</sub> < p</p>
+                  <span class="key-value" id="alicePrivate">-</span>
+                </div>
+                <div class="key-item">
+                  <label>Вычисление числа Y<sub>a</sub> (открытй ключ)</label>
+                  <p>
+                    Y<sub>a</sub> = g<sup>X<sub>a</sub></sup> mod p
+                  </p>
+                  <span class="key-value" id="alicePublic">-</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="user-keys">
+              <h3>3.2 Ключи Боба</h3>
+              <div class="key-pair">
+                <div class="key-item">
+                  <label>Выбор числа X<sub>b</sub> (закрытый ключ)</label>
+                  <p>X<sub>b</sub> < p</p>
+                  <span class="key-value" id="bobPrivate">-</span>
+                </div>
+                <div class="key-item">
+                  <label>Вычисление числа Y<sub>b</sub> (открытй ключ)</label>
+                  <p>
+                    Y<sub>b</sub> = g<sup>X<sub>b</sub></sup> mod p
+                  </p>
+                  <span class="key-value" id="bobPublic">-</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button class="generate-keys-btn">Сгенерировать ключи</button>
+        </section>
+
+        <section>
+          <h2>4) Создание общего секретного ключа пользователем</h2>
+          <div class="exchange-info">
+            <h3>4.1 Создание общего секретного ключа пользователем Алиса</h3>
+            <div class="secret-calculation">
+              <div class="calculation">
+                <label
+                  >K = (Y<sub>b</sub>)<sup>X<sub>a</sub></sup> mod p</label
+                >
+                <span class="key-value" id="aliceSecret">-</span>
+              </div>
+            </div>
+
+            <h3>4.2 Создание общего секретного ключа пользователем Боб</h3>
+            <div class="secret-calculation">
+              <div class="calculation">
+                <label
+                  >K = (Y<sub>a</sub>)<sup>X<sub>b</sub></sup> mod p</label
+                >
+                <span class="key-value" id="bobSecret">-</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <script type="module" src="./js/main.js"></script>
+  </body>
+</html>
