@@ -10,11 +10,11 @@ const nextBtns = document.querySelectorAll(".next-btn");
 
 let step = 0;
 let p = null;
-let z = [];
 let phiP = null;
 let phiArrayP = [];
 let zArray = [];
 let pUnique = [];
+let validNumberG = [];
 let g = null;
 
 const robinMillerAlg = new RobinMillerAlg();
@@ -77,7 +77,7 @@ function updateActiveH(step) {
   });
 }
 
-function validateNumberField(field, max, min = 13) {
+function validateNumberField(field, max, min = 7) {
   const value = field.value.trim();
   const fieldMsg = field.parentElement.querySelector(".field-msg");
   field.classList.remove("field-valid");
@@ -180,52 +180,97 @@ generateBtn.addEventListener("click", () => {
 });
 
 function diffiChalman() {
-  console.log("=== НАЧАЛО АЛГОРИТМА ДИФФИ-ХЕЛЛМАНА ===");
-
   infoContent.innerHTML = "";
 
   const pMinusOne = p - 1;
-  console.log("p =", p);
-  console.log("p-1 =", pMinusOne);
 
-  const pDiv = document.createElement("div");
-  pDiv.innerHTML = `p = ${p}`;
-  infoContent.appendChild(pDiv);
+  const step1Div = document.createElement("div");
+  step1Div.className = "calculation-step";
+  step1Div.innerHTML = `<h3>Шаг 2.1: Исходное простое число</h3>
+                       <p>p = ${p}</p>`;
+  infoContent.appendChild(step1Div);
 
   zArray = createZArrayP(p);
-  console.log(zArray);
+  const step2Div = document.createElement("div");
+  step2Div.className = "calculation-step";
+  step2Div.innerHTML = `<h3>Шаг 2.2: Множество {0, ..., p - 1}</h3>`;
+  step2Div.innerHTML +=
+    zArray.length > 8
+      ? `<p>Z<sub>${p}</sub> = {${zArray.splice(0, 5).join(", ")}, ..., ${zArray
+          .splice(-3)
+          .join(", ")}}</p>`
+      : `<p>Z<sub>${p}</sub> = {${zArray.join(", ")}}</p>`;
+  infoContent.appendChild(step2Div);
 
-  const zDiv = document.createElement("div");
-  zDiv.innerHTML = `Z<sub>${p}</sub> = {${zArray
-    .splice(0, 5)
-    .join(", ")}, ..., ${zArray
-    .splice(zArray.length - 3, zArray.length - 1)
-    .join(", ")}}`;
-  infoContent.appendChild(zDiv);
-
-  const pMinusOneDiv = document.createElement("div");
-  pMinusOneDiv.innerHTML = `p - 1 = ${pMinusOne}`;
-  infoContent.appendChild(pMinusOneDiv);
+  const step3Div = document.createElement("div");
+  step3Div.className = "calculation-step";
+  step3Div.innerHTML = `<h3>Шаг 2.3: Вычисляем p-1</h3>
+                       <p>p - 1 = ${p} - 1 = ${pMinusOne}</p>
+                       `;
+  infoContent.appendChild(step3Div);
 
   const factorizationResult = fermaFactorizationAlg.factorize(
     pMinusOne.toString()
   );
   const factors = factorizationResult.factors;
-  console.log("Множители p-1:", factors);
 
-  const factorsDiv = document.createElement("div");
-  factorsDiv.innerHTML = `${pMinusOne} = ${factors.join(" * ")}`;
-  infoContent.append(factorsDiv);
+  const step4Div = document.createElement("div");
+  step4Div.className = "calculation-step";
+  step4Div.innerHTML = `<h3>Шаг 2.4: Факторизация ${pMinusOne} (разложение числа на простые множители)</h3>
+                       <p>${pMinusOne} = ${factors.join(" × ")}</p>
+                      `;
+  infoContent.appendChild(step4Div);
 
   pUnique = [...new Set(factors)];
-  console.log("Множество Zzzz (уникальные множители):", pUnique);
 
-  const pUniqueDiv = document.createElement("div");
-  pUniqueDiv.innerHTML = `Уникальные множители числа ${pMinusOne} = {${pUnique.join(
+  const step5Div = document.createElement("div");
+  step5Div.className = "calculation-step";
+  step5Div.innerHTML = `<h3>Шаг 2.5: Уникальные простые множители</h3>
+                       <p>Уникальные множители числа ${pMinusOne} = {${pUnique.join(
     ", "
-  )}}`;
-  infoContent.appendChild(pUniqueDiv);
+  )}}</p>`;
+  infoContent.appendChild(step5Div);
 
+  const step6Div = document.createElement("div");
+  step6Div.className = "calculation-step";
+  step6Div.innerHTML = `<h3>Шаг 2.6: Что такое первообразный корень?</h3>
+                       <p>Число g называется первообразным корнем по модулю p, если:</p>
+                       <p>g<sup>(p-1)/q</sup> mod p ≠ 1 для всех простых делителей q числа p-1</p>
+                       <p>Это означает, что g порождает группу Z<sub>${p}</sub></p>`;
+  infoContent.appendChild(step6Div);
+
+  validNumberG = checkValidNumberG(p, pUnique);
+
+  const step7Div = document.createElement("div");
+  step7Div.className = "calculation-step";
+  step7Div.innerHTML = `<h3>Шаг 2.7: Найденные первообразные корни</h3>`;
+  step7Div.innerHTML += ` <p>Для p = ${p} существует ${validNumberG.length} первообразных корней:</p>`;
+  step7Div.innerHTML +=
+    validNumberG.length > 8
+      ? `<p>g = {${validNumberG.slice(0, 5).join(", ")}, ..., ${validNumberG
+          .slice(-3)
+          .join(", ")}}</p>`
+      : `<p>g = {${validNumberG.join(", ")}}</p>`;
+  infoContent.appendChild(step7Div);
+
+  const step8Div = document.createElement("div");
+  step8Div.className = "calculation-step";
+  step8Div.innerHTML = `<h3>Шаг 2.8: Выберите первообразный корень g</h3>
+                       <p>Выберите один из первообразных корней для продолжения (Приведены только первые 10):</p>`;
+
+  const validSelectGDiv = document.createElement("div");
+  validSelectGDiv.className = "valid-select-g";
+  validSelectGDiv.innerHTML = "g = ";
+  const validSelectG = document.createElement("select");
+  validSelectG.id = "gValues";
+
+  validSelectGDiv.appendChild(validSelectG);
+  step8Div.appendChild(validSelectGDiv);
+  infoContent.appendChild(step8Div);
+
+  createSelectG(validNumberG);
+
+  phiArrayP = [];
   for (let i = 1; i < p; i++) {
     let isCoprime = true;
     for (const factor of pUnique) {
@@ -240,16 +285,44 @@ function diffiChalman() {
   }
 
   phiP = phiArrayP.length;
-  console.log("φ(p) количество:", phiP);
-  console.log("φ(p) массив (первые 10 элементов):", phiArrayP.slice(0, 10));
-
-  g = findGenerator();
-  if (!g) {
-    console.error("Не удалось найти генератор!");
-    return;
-  }
 
   generateKeys();
+}
+
+function checkValidNumberG(p, uniqueFactors) {
+  const roots = [];
+  const pMinusOne = p - 1;
+
+  for (let g = 2; g < p; g++) {
+    let isPrimitiveRoot = true;
+
+    for (const q of uniqueFactors) {
+      const e = pMinusOne / q;
+      const result = mod(g, e, p);
+
+      if (result === 1) {
+        isPrimitiveRoot = false;
+        break;
+      }
+    }
+
+    if (isPrimitiveRoot) {
+      roots.push(g);
+    }
+  }
+
+  return roots;
+}
+
+function createSelectG(arrayG) {
+  const gValues = document.getElementById("gValues");
+  for (let i = 0; i < arrayG.length; i++) {
+    const option = document.createElement("option");
+    option.value = arrayG[i];
+    option.innerHTML = arrayG[i];
+    gValues.appendChild(option);
+    if (i === 9) break;
+  }
 }
 
 function createZArrayP(p) {
@@ -258,40 +331,6 @@ function createZArrayP(p) {
     result.push(i);
   }
   return result;
-}
-
-function findGenerator() {
-  console.log("\n=== ПОИСК ГЕНЕРАТОРА g ===");
-  let attempts = 0;
-  const maxAttempts = 50;
-
-  while (attempts < maxAttempts) {
-    const candidate = phiArrayP[Math.floor(Math.random() * phiArrayP.length)];
-    let isGenerator = true;
-
-    console.log(`\nПроверяем кандидата g = ${candidate}:`);
-
-    for (const factor of z) {
-      const result = mod(candidate, factor, p);
-      console.log(`  ${candidate}^${factor} mod ${p} = ${result}`);
-
-      if (result === 1) {
-        console.log(`  ❌ Не подходит: ${candidate}^${factor} mod ${p} = 1`);
-        isGenerator = false;
-        break;
-      }
-    }
-
-    if (isGenerator) {
-      console.log(`✅ Найден генератор g = ${candidate}`);
-      return candidate;
-    }
-
-    attempts++;
-  }
-
-  console.error(`❌ Не удалось найти генератор за ${maxAttempts} попыток`);
-  return null;
 }
 
 function generateKeys() {
