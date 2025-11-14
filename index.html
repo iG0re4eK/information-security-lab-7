@@ -22,8 +22,9 @@
               <input
                 type="text"
                 id="pValueField"
-                placeholder="Введите простое число"
-            /></label>
+                placeholder="Введите простое число" />
+              <div class="field-msg"></div
+            ></label>
 
             <details>
               <summary>Сгенерировать по Rabin-Miller</summary>
@@ -31,14 +32,8 @@
                 <div class="content">
                   <label for="bitValue"
                     >Кол-во бит:
-                    <input
-                      type="number"
-                      placeholder="Количество бит"
-                      id="bitValue"
-                      min="11"
-                      max="21"
-                      value="21"
-                  /></label>
+                    <select name="bitValue" id="bitValue"></select
+                  ></label>
 
                   <button id="generateBtn" class="generate-btn">
                     <img src="./img/dice.png" alt="" />
@@ -63,6 +58,9 @@
             <span>g<sup>p-1</sup> mod p</span>
             являются различными и образуют <span>{1, ..., p-1}</span>
           </p>
+
+          <div id="infoContent" class="info-content"></div>
+
           <button class="next-btn">Дальше</button>
         </section>
         <section class="key-generation-section">

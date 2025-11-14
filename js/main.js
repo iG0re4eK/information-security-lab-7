@@ -4,6 +4,7 @@ import { FermaFactorization } from "./fermaFactorization.js";
 const pValueField = document.getElementById("pValueField");
 const bitValue = document.getElementById("bitValue");
 const generateBtn = document.getElementById("generateBtn");
+const infoContent = document.getElementById("infoContent");
 
 const nextBtns = document.querySelectorAll(".next-btn");
 
@@ -12,30 +13,43 @@ let p = null;
 let z = [];
 let phiP = null;
 let phiArrayP = [];
-let phiPminuOne = [];
+let zArray = [];
+let pUnique = [];
 let g = null;
 
 const robinMillerAlg = new RobinMillerAlg();
-const ferma = new FermaFactorization();
+const fermaFactorizationAlg = new FermaFactorization();
 
 function mod(a, x, n) {
-  let p = 1n;
-  let base = BigInt(a);
-  let exponent = BigInt(x);
-  const modulus = BigInt(n);
+  let p = 1;
+  let i = x;
 
-  while (exponent > 0n) {
-    if (exponent % 2n === 1n) {
-      p = (p * base) % modulus;
+  while (i > 0) {
+    const s = i % 2;
+
+    if (s === 1) {
+      p = (p * a) % n;
     }
-    base = (base * base) % modulus;
-    exponent = exponent >> 1n;
+
+    a = (a * a) % n;
+    i = Math.floor((i - s) / 2);
   }
 
-  return Number(p);
+  return p;
 }
 
 updateActiveH(step);
+createBitValueOptions(11, 22);
+
+function createBitValueOptions(min, max) {
+  for (let i = min; i < max; i++) {
+    const option = document.createElement("option");
+    option.value = i;
+    option.innerHTML = i;
+    bitValue.appendChild(option);
+  }
+  bitValue.value = max - 1;
+}
 
 function updateActiveH(step) {
   const headersTwo = document.querySelectorAll("section h2");
@@ -48,11 +62,14 @@ function updateActiveH(step) {
         const headerTop =
           header.getBoundingClientRect().top + window.pageYOffset;
         const offset = 32;
+        const delayMs = 500;
 
-        window.scrollTo({
-          top: headerTop - offset,
-          behavior: "smooth",
-        });
+        setTimeout(() => {
+          window.scrollTo({
+            top: headerTop - offset,
+            behavior: "smooth",
+          });
+        }, delayMs);
       }
     } else {
       header.classList.remove("current-step");
@@ -60,36 +77,64 @@ function updateActiveH(step) {
   });
 }
 
-function validateNumberField(field, max, min = 2) {
+function validateNumberField(field, max, min = 13) {
   const value = field.value.trim();
+  const fieldMsg = field.parentElement.querySelector(".field-msg");
+  field.classList.remove("field-valid");
+  fieldMsg.classList.remove("valid-msg");
 
   if (!value) {
     field.classList.add("field-error");
+    fieldMsg.classList.add("error-msg");
+    fieldMsg.textContent = "Поле не может быть пустым";
     return false;
   }
 
   const numValue = Number(value);
-  if (
-    isNaN(numValue) ||
-    !Number.isInteger(numValue) ||
-    numValue < min ||
-    numValue > max
-  ) {
+  if (isNaN(numValue)) {
     field.classList.add("field-error");
+    fieldMsg.classList.add("error-msg");
+    fieldMsg.textContent = "Введите число";
     return false;
-  } else {
-    field.classList.remove("field-error");
-    return true;
   }
+
+  if (!Number.isInteger(numValue)) {
+    field.classList.add("field-error");
+    fieldMsg.classList.add("error-msg");
+    fieldMsg.textContent = "Число должно быть целым";
+    return false;
+  }
+
+  if (numValue < min || numValue > max) {
+    field.classList.add("field-error");
+    fieldMsg.classList.add("error-msg");
+    fieldMsg.textContent = `Число должно быть от ${min} до ${max}`;
+    return false;
+  }
+
+  p = Number(pValueField.value);
+
+  let isPrime;
+  if (p < 2000) {
+    isPrime = robinMillerAlg.isPrime(p);
+  } else {
+    isPrime = robinMillerAlg.rabinMiller(p);
+  }
+
+  if (!isPrime) {
+    field.classList.add("field-error");
+    fieldMsg.classList.add("error-msg");
+    fieldMsg.textContent = `Число непростое`;
+    return false;
+  }
+
+  fieldMsg.classList.remove("error-msg");
+  fieldMsg.classList.add("valid-msg");
+  field.classList.remove("field-error");
+  field.classList.add("field-valid");
+  fieldMsg.textContent = "Число простое";
+  return true;
 }
-
-pValueField.addEventListener("change", () => {
-  validateNumberField(pValueField, Number.MAX_SAFE_INTEGER);
-});
-
-bitValue.addEventListener("change", () => {
-  validateNumberField(bitValue, 21, 11);
-});
 
 nextBtns.forEach((btn, index) => {
   btn.addEventListener("click", () => {
@@ -103,28 +148,13 @@ nextBtns.forEach((btn, index) => {
 function validateStep(index) {
   switch (index) {
     case 0:
-      if (!validateNumberField(pValueField, Number.MAX_SAFE_INTEGER, 2)) {
+      if (!validateNumberField(pValueField, Number.MAX_SAFE_INTEGER)) {
         step = index;
         return false;
-      }
-
-      p = Number(pValueField.value);
-
-      let isPrime;
-      if (p < 2000) {
-        isPrime = robinMillerAlg.isPrime(p);
       } else {
-        isPrime = robinMillerAlg.rabinMiller(p);
-      }
-
-      if (isPrime) {
         diffiChalman();
         step = index + 1;
         return true;
-      } else {
-        step = index;
-        pValueField.classList.add("field-error");
-        return false;
       }
 
     default:
@@ -135,10 +165,6 @@ function validateStep(index) {
 
 generateBtn.addEventListener("click", () => {
   console.clear();
-
-  if (!validateNumberField(bitValue, 21, 11)) {
-    return;
-  }
 
   pValueField.classList.remove("field-error");
   robinMillerAlg.setBit(Number(bitValue.value));
@@ -156,21 +182,53 @@ generateBtn.addEventListener("click", () => {
 function diffiChalman() {
   console.log("=== НАЧАЛО АЛГОРИТМА ДИФФИ-ХЕЛЛМАНА ===");
 
+  infoContent.innerHTML = "";
+
   const pMinusOne = p - 1;
   console.log("p =", p);
   console.log("p-1 =", pMinusOne);
 
-  const factorizationResult = ferma.factorize(pMinusOne.toString());
+  const pDiv = document.createElement("div");
+  pDiv.innerHTML = `p = ${p}`;
+  infoContent.appendChild(pDiv);
+
+  zArray = createZArrayP(p);
+  console.log(zArray);
+
+  const zDiv = document.createElement("div");
+  zDiv.innerHTML = `Z<sub>${p}</sub> = {${zArray
+    .splice(0, 5)
+    .join(", ")}, ..., ${zArray
+    .splice(zArray.length - 3, zArray.length - 1)
+    .join(", ")}}`;
+  infoContent.appendChild(zDiv);
+
+  const pMinusOneDiv = document.createElement("div");
+  pMinusOneDiv.innerHTML = `p - 1 = ${pMinusOne}`;
+  infoContent.appendChild(pMinusOneDiv);
+
+  const factorizationResult = fermaFactorizationAlg.factorize(
+    pMinusOne.toString()
+  );
   const factors = factorizationResult.factors;
   console.log("Множители p-1:", factors);
 
-  z = [...new Set(factors)];
-  console.log("Множество Z (уникальные множители):", z);
+  const factorsDiv = document.createElement("div");
+  factorsDiv.innerHTML = `${pMinusOne} = ${factors.join(" * ")}`;
+  infoContent.append(factorsDiv);
 
-  phiArrayP = [];
+  pUnique = [...new Set(factors)];
+  console.log("Множество Zzzz (уникальные множители):", pUnique);
+
+  const pUniqueDiv = document.createElement("div");
+  pUniqueDiv.innerHTML = `Уникальные множители числа ${pMinusOne} = {${pUnique.join(
+    ", "
+  )}}`;
+  infoContent.appendChild(pUniqueDiv);
+
   for (let i = 1; i < p; i++) {
     let isCoprime = true;
-    for (const factor of z) {
+    for (const factor of pUnique) {
       if (i % factor === 0) {
         isCoprime = false;
         break;
@@ -192,6 +250,14 @@ function diffiChalman() {
   }
 
   generateKeys();
+}
+
+function createZArrayP(p) {
+  const result = [];
+  for (let i = 0; i < p; i++) {
+    result.push(i);
+  }
+  return result;
 }
 
 function findGenerator() {
