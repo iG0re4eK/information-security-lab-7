@@ -293,12 +293,6 @@ function diffiChalman() {
           .slice(-3)
           .join(", ")}}</p>`
       : `<p>g = {${validNumberG.join(", ")}}</p>`;
-
-  if (validNumberG.length === phiPminusOne) {
-    step7Div.innerHTML += `<p> Подтверждено: количество корней = φ(p-1)</p>`;
-  } else {
-    step7Div.innerHTML += `<p> Несоответствие: найдено ${validNumberG.length}, ожидалось ${phiPminusOne}</p>`;
-  }
   infoContent.appendChild(step7Div);
 
   const step8Div = document.createElement("div");
@@ -345,8 +339,8 @@ function checkValidNumberG(p, pMinusOne, uniqueFactors) {
     let isPrimitiveRoot = true;
 
     for (const q of uniqueFactors) {
-      const e = pMinusOne / q;
-      const result = mod(g, e, p);
+      const d = pMinusOne / q;
+      const result = mod(g, d, p);
 
       if (result === 1) {
         isPrimitiveRoot = false;
