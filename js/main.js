@@ -10,6 +10,8 @@ const nextBtns = document.querySelectorAll(".next-btn");
 
 let step = 0;
 let p = null;
+let phiP = null;
+let phiArrayP = [];
 let phiPminusOne = null;
 let phiArrayPminusOne = [];
 let zArray = [];
@@ -247,6 +249,9 @@ function diffiChalman() {
                        <b>Алгоритм:</b>`;
   infoContent.appendChild(step6Div);
 
+  phiArrayP = coprime(p);
+  phiArrayP = phiArrayP.length;
+
   phiArrayPminusOne = coprime(pMinusOne);
   phiPminusOne = phiArrayPminusOne.length;
 
@@ -272,7 +277,8 @@ function diffiChalman() {
   const step6DivStep3 = document.createElement("div");
   step6DivStep3.className = "calculation-step";
   step6DivStep3.innerHTML = `<h4>3. Проверка на примитивность:</h4>
-                       <p>Возводим <b>a</b> в степени (p-1)/q, где <b>q</b> - простой делитель числа p-1. Если ни для одного <b>q</b> результат не равен 1, то <b>a</b> - примитивный элемент.</p>`;
+                       <p>Возводим a в степени d, где d - делитель φ(p-1)</p>
+                       <p>Если ни для одного делителя d: a<sup>d</sup> ≠ 1 (mod p), то a - примитивный элемент</p>`;
   infoContent.appendChild(step6DivStep3);
 
   validNumberG = checkValidNumberG(p, pMinusOne, pUnique);
@@ -287,6 +293,12 @@ function diffiChalman() {
           .slice(-3)
           .join(", ")}}</p>`
       : `<p>g = {${validNumberG.join(", ")}}</p>`;
+
+  if (validNumberG.length === phiPminusOne) {
+    step7Div.innerHTML += `<p> Подтверждено: количество корней = φ(p-1)</p>`;
+  } else {
+    step7Div.innerHTML += `<p> Несоответствие: найдено ${validNumberG.length}, ожидалось ${phiPminusOne}</p>`;
+  }
   infoContent.appendChild(step7Div);
 
   const step8Div = document.createElement("div");
