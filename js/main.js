@@ -329,7 +329,7 @@ function coprime(n) {
 function checkValidNumberG(p, pMinusOne, uniqueFactors) {
   const roots = [];
 
-  for (let g = 1; g < p; g++) {
+  for (let g = 2; g < p; g++) {
     let isPrimitiveRoot = true;
 
     for (const q of uniqueFactors) {
@@ -406,11 +406,9 @@ function generateKeys() {
   console.log(`  K = ${g}^(${Xa}*${Xb}) mod ${p} = ${Kg}`);
 
   if (Ka === Kb && Ka === Kg) {
-    console.log(`✅ УСПЕХ: Все ключи совпадают! K = ${Ka}`);
+    console.log(` Все ключи совпадают! K = ${Ka}`);
   } else {
-    console.log(`❌ ОШИБКА: Ключи не совпадают!`);
+    console.log(`Ключи не совпадают!`);
     console.log(`   Ka = ${Ka}, Kb = ${Kb}, Kg = ${Kg}`);
   }
-
-  console.log("\n=== АЛГОРИТМ ДИФФИ-ХЕЛЛМАНА ЗАВЕРШЕН ===");
 }
