@@ -10,8 +10,8 @@ const nextBtns = document.querySelectorAll(".next-btn");
 
 let step = 0;
 let p = null;
-let phiP = null;
-let phiArrayP = [];
+let phiPminusOne = null;
+let phiArrayPminusOne = [];
 let zArray = [];
 let pUnique = [];
 let validNumberG = [];
@@ -157,6 +157,12 @@ function validateStep(index) {
         return true;
       }
 
+    case 1:
+      g = parseInt(document.getElementById("gValues").value);
+      generateKeys();
+      step = index + 1;
+      return true;
+
     default:
       console.warn(`Шаг ${index} не получился`);
       return false;
@@ -186,14 +192,14 @@ function diffiChalman() {
 
   const step1Div = document.createElement("div");
   step1Div.className = "calculation-step";
-  step1Div.innerHTML = `<h3>Шаг 2.1: Исходное простое число</h3>
+  step1Div.innerHTML = `<h3>2.1) Исходное простое число</h3>
                        <p>p = ${p}</p>`;
   infoContent.appendChild(step1Div);
 
   zArray = createZArrayP(p);
   const step2Div = document.createElement("div");
   step2Div.className = "calculation-step";
-  step2Div.innerHTML = `<h3>Шаг 2.2: Множество {0, ..., p - 1}</h3>`;
+  step2Div.innerHTML = `<h3>2.2) Множество {0, ..., p - 1}</h3>`;
   step2Div.innerHTML +=
     zArray.length > 8
       ? `<p>Z<sub>${p}</sub> = {${zArray.splice(0, 5).join(", ")}, ..., ${zArray
@@ -204,7 +210,7 @@ function diffiChalman() {
 
   const step3Div = document.createElement("div");
   step3Div.className = "calculation-step";
-  step3Div.innerHTML = `<h3>Шаг 2.3: Вычисляем p-1</h3>
+  step3Div.innerHTML = `<h3>2.3) Вычисляем p-1</h3>
                        <p>p - 1 = ${p} - 1 = ${pMinusOne}</p>
                        `;
   infoContent.appendChild(step3Div);
@@ -216,7 +222,7 @@ function diffiChalman() {
 
   const step4Div = document.createElement("div");
   step4Div.className = "calculation-step";
-  step4Div.innerHTML = `<h3>Шаг 2.4: Факторизация ${pMinusOne} (разложение числа на простые множители)</h3>
+  step4Div.innerHTML = `<h3>2.4) Факторизация ${pMinusOne} (разложение числа на простые множители)</h3>
                        <p>${pMinusOne} = ${factors.join(" × ")}</p>
                       `;
   infoContent.appendChild(step4Div);
@@ -225,7 +231,7 @@ function diffiChalman() {
 
   const step5Div = document.createElement("div");
   step5Div.className = "calculation-step";
-  step5Div.innerHTML = `<h3>Шаг 2.5: Уникальные простые множители</h3>
+  step5Div.innerHTML = `<h3>2.5) Уникальные простые множители</h3>
                        <p>Уникальные множители числа ${pMinusOne} = {${pUnique.join(
     ", "
   )}}</p>`;
@@ -233,17 +239,47 @@ function diffiChalman() {
 
   const step6Div = document.createElement("div");
   step6Div.className = "calculation-step";
-  step6Div.innerHTML = `<h3>Шаг 2.6: Что такое первообразный корень?</h3>
-                       <p>Число g называется первообразным корнем по модулю p, если:</p>
-                       <p>g<sup>(p-1)/q</sup> mod p ≠ 1 для всех простых делителей q числа p-1</p>
-                       <p>Это означает, что g порождает группу Z<sub>${p}</sub></p>`;
+  step6Div.innerHTML = `<h3>2.6) Что такое примитивный корень простого числа p?</h3>
+                       <p>Число g называется примитивным корнем простого числа p, если:</p>
+                       <p>числа g mod p, g<sup>2</sup> mod p, ..., g<sup>p - 1</sup> mod p</p>
+                       <p>являются различными и образуют {1, ..., p - 1}</p>
+                       <br />
+                       <b>Алгоритм:</b>`;
   infoContent.appendChild(step6Div);
 
-  validNumberG = checkValidNumberG(p, pUnique);
+  phiArrayPminusOne = coprime(pMinusOne);
+  phiPminusOne = phiArrayPminusOne.length;
+
+  const step6DivStep1 = document.createElement("div");
+  step6DivStep1.className = "calculation-step";
+  step6DivStep1.innerHTML = `<h4>1. Вычисление функции Эйлера φ(p - 1):</h4>
+                       <p>Определяет количество натуральных чисел, меньших чисел, меньших p - 1 и взаимо простых с ним.</p>
+                       <p>Количество φ(p - 1) = ${phiPminusOne}</p>`;
+  step6DivStep1.innerHTML +=
+    phiArrayPminusOne.length > 8
+      ? `<p>φ(p - 1) = {${phiArrayPminusOne
+          .splice(0, 5)
+          .join(", ")}, ..., ${phiArrayPminusOne.splice(-3).join(", ")}}</p>`
+      : `<p>φ(p - 1) = {${phiArrayPminusOne.join(", ")}}</p>`;
+  infoContent.appendChild(step6DivStep1);
+
+  const step6DivStep2 = document.createElement("div");
+  step6DivStep2.className = "calculation-step";
+  step6DivStep2.innerHTML = `<h4>2. Перебор элементов:</h4>
+                       <p>Для каждого элемента a из поля Z<sub>${p}</sub> проверяем, является ли он примитивным.</p>`;
+  infoContent.appendChild(step6DivStep2);
+
+  const step6DivStep3 = document.createElement("div");
+  step6DivStep3.className = "calculation-step";
+  step6DivStep3.innerHTML = `<h4>3. Проверка на примитивность:</h4>
+                       <p>Возводим <b>a</b> в степени (p-1)/q, где <b>q</b> - простой делитель числа p-1. Если ни для одного <b>q</b> результат не равен 1, то <b>a</b> - примитивный элемент.</p>`;
+  infoContent.appendChild(step6DivStep3);
+
+  validNumberG = checkValidNumberG(p, pMinusOne, pUnique);
 
   const step7Div = document.createElement("div");
   step7Div.className = "calculation-step";
-  step7Div.innerHTML = `<h3>Шаг 2.7: Найденные первообразные корни</h3>`;
+  step7Div.innerHTML = `<h3>2.7) Найденные первообразные корни</h3>`;
   step7Div.innerHTML += ` <p>Для p = ${p} существует ${validNumberG.length} первообразных корней:</p>`;
   step7Div.innerHTML +=
     validNumberG.length > 8
@@ -255,8 +291,8 @@ function diffiChalman() {
 
   const step8Div = document.createElement("div");
   step8Div.className = "calculation-step";
-  step8Div.innerHTML = `<h3>Шаг 2.8: Выберите первообразный корень g</h3>
-                       <p>Выберите один из первообразных корней для продолжения (Приведены только первые 10):</p>`;
+  step8Div.innerHTML = `<h3>2.8) Выберите первообразный корень g</h3>
+                       <p>Выберите один из первообразных корней для продолжения (Приведены только первые 10 (если есть 10)):</p>`;
 
   const validSelectGDiv = document.createElement("div");
   validSelectGDiv.className = "valid-select-g";
@@ -269,31 +305,31 @@ function diffiChalman() {
   infoContent.appendChild(step8Div);
 
   createSelectG(validNumberG);
-
-  phiArrayP = [];
-  for (let i = 1; i < p; i++) {
-    let isCoprime = true;
-    for (const factor of pUnique) {
-      if (i % factor === 0) {
-        isCoprime = false;
-        break;
-      }
-    }
-    if (isCoprime) {
-      phiArrayP.push(i);
-    }
-  }
-
-  phiP = phiArrayP.length;
-
-  generateKeys();
 }
 
-function checkValidNumberG(p, uniqueFactors) {
-  const roots = [];
-  const pMinusOne = p - 1;
+function gcd(a, b) {
+  while (b !== 0) {
+    let temp = b;
+    b = a % b;
+    a = temp;
+  }
+  return a;
+}
 
-  for (let g = 2; g < p; g++) {
+function coprime(n) {
+  const result = [];
+  for (let i = 1; i < n; i++) {
+    if (gcd(i, n) === 1) {
+      result.push(i);
+    }
+  }
+  return result;
+}
+
+function checkValidNumberG(p, pMinusOne, uniqueFactors) {
+  const roots = [];
+
+  for (let g = 1; g < p; g++) {
     let isPrimitiveRoot = true;
 
     for (const q of uniqueFactors) {
@@ -334,14 +370,14 @@ function createZArrayP(p) {
 }
 
 function generateKeys() {
-  console.log("\n=== ГЕНЕРАЦИЯ КЛЮЧЕЙ ===");
-
   let Xa, Xb;
   let attempts = 0;
 
   do {
-    Xa = phiArrayP[Math.floor(Math.random() * phiArrayP.length)];
-    Xb = phiArrayP[Math.floor(Math.random() * phiArrayP.length)];
+    Xa =
+      phiArrayPminusOne[Math.floor(Math.random() * phiArrayPminusOne.length)];
+    Xb =
+      phiArrayPminusOne[Math.floor(Math.random() * phiArrayPminusOne.length)];
     attempts++;
 
     if (attempts > 20) {

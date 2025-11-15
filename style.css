@@ -36,7 +36,7 @@
 }
 
 .valid-msg {
-  color: rgb(12, 105, 0);
+  color: rgb(22, 186, 0);
 }
 
 .field-msg {
@@ -56,11 +56,19 @@ body {
 
 section {
   color: var(--color-text);
-  min-height: 100vh;
-  margin: 2rem 0;
+  min-height: 50vh;
+  margin-top: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
+}
+
+section:first-child {
+  margin-top: 1rem;
+}
+
+section:last-child {
+  margin-bottom: 40vh;
 }
 
 .info-content {
@@ -142,6 +150,44 @@ h3 {
   position: relative;
 }
 
+select {
+  background-color: #69af00;
+  border: none;
+  border-radius: 0.5rem;
+  color: var(--color-text);
+  height: 2.5rem;
+
+  option {
+    opacity: 0.5;
+  }
+}
+
+h4 {
+  border-radius: 1rem 0 0 1rem;
+  margin: 1rem 0;
+  margin-left: 2rem;
+  padding: 0.1rem;
+  padding-left: 1rem;
+  color: var(--color-text);
+  font-size: 0.8rem;
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0),
+    var(--color-secondary)
+  );
+  position: relative;
+}
+
+h4 ~ p {
+  margin-left: 2rem;
+}
+
+.calculation-step {
+  p ~ b {
+    margin-left: 2rem;
+  }
+}
+
 .input-section {
   display: flex;
   flex-direction: column;
@@ -169,7 +215,7 @@ h3 {
     details {
       position: absolute;
       top: 6rem;
-      left: 20rem;
+      right: 0;
       width: 250px;
       border-radius: 0.5rem;
       background-color: var(--color-secondary);
