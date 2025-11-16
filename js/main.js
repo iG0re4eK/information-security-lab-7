@@ -9,6 +9,9 @@ const infoContent = document.getElementById("infoContent");
 const alicePrivateSelect = document.getElementById("alicePrivateSelect");
 const bobPrivateSelect = document.getElementById("bobPrivateSelect");
 
+const aliceSecret = document.getElementById("aliceSecret");
+const bobSecret = document.getElementById("bobSecret");
+
 const nextBtns = document.querySelectorAll(".next-btn");
 
 let step = 0;
@@ -272,7 +275,7 @@ function diffiChalman() {
   const step6DivStep1 = document.createElement("div");
   step6DivStep1.className = "calculation-step";
   step6DivStep1.innerHTML = `<h4>1. Вычисление функции Эйлера φ(p - 1):</h4>
-                       <p>Определяет количество натуральных чисел, меньших (p - 1) и взаимо простых с ним.</p>
+                       <p>Определяет количество натуральных чисел, меньших ${pMinusOne} и взаимо простых с ним.</p>
                        <p>Количество φ(p - 1) = ${phiPminusOne}</p>`;
   step6DivStep1.innerHTML +=
     phiArrayPminusOne.length > 8
@@ -291,16 +294,16 @@ function diffiChalman() {
   const step6DivStep3 = document.createElement("div");
   step6DivStep3.className = "calculation-step";
   step6DivStep3.innerHTML = `<h4>3. Проверка на примитивность:</h4>
-                       <p>Возводим a в степени d, где d - (p-1)/q для каждого простого делителя q числа (p-1)</p>
-                       <p>Если ни для одного делителя d: a<sup>d</sup> ≠ 1 (mod p), то a - примитивный элемент</p>`;
+                       <p>Возводим a в степени d, где d — (p-1)/q для каждого простого делителя q числа (p-1)</p>
+                       <p>Если ни для одного делителя d: a<sup>d</sup> ≠ 1 (mod p), то a — примитивный элемент</p>`;
   infoContent.appendChild(step6DivStep3);
 
   validNumberG = checkValidNumberG(pMinusOne, pUnique);
 
   const step7Div = document.createElement("div");
   step7Div.className = "calculation-step";
-  step7Div.innerHTML = `<h3>2.7) Найденные первообразные корни</h3>`;
-  step7Div.innerHTML += ` <p>Для p = ${p} существует ${validNumberG.length} первообразных корней:</p>`;
+  step7Div.innerHTML = `<h3>2.7) Найденные примитивные корни</h3>`;
+  step7Div.innerHTML += ` <p>Для p = ${p} существует ${validNumberG.length} примитивных корней:</p>`;
   step7Div.innerHTML +=
     validNumberG.length > 8
       ? `<p>g = {${validNumberG.slice(0, 5).join(", ")}, ..., ${validNumberG
@@ -311,8 +314,8 @@ function diffiChalman() {
 
   const step8Div = document.createElement("div");
   step8Div.className = "calculation-step";
-  step8Div.innerHTML = `<h3>2.8) Выберите первообразный корень g</h3>
-                       <p>Выберите один из первообразных корней для продолжения (Приведены только первые 10 (если есть 10)):</p>`;
+  step8Div.innerHTML = `<h3>2.8) Выберите примитивный корень g</h3>
+                       <p>Выберите один из примитивных корней для продолжения (Приведены только последние 10 (если есть 10)):</p>`;
 
   const validSelectGDiv = document.createElement("div");
   validSelectGDiv.className = "valid-select-g";
@@ -386,12 +389,16 @@ function checkValidNumberG(pMinusOne, uniqueFactors) {
 
 function createSelectG(arrayG) {
   const gValues = document.getElementById("gValues");
-  for (let i = 0; i < arrayG.length; i++) {
+  gValues.innerHTML = "";
+
+  const startIndex = Math.max(0, arrayG.length - 10);
+  const lastTen = arrayG.slice(startIndex);
+
+  for (let i = 0; i < lastTen.length; i++) {
     const option = document.createElement("option");
-    option.value = arrayG[i];
-    option.innerHTML = arrayG[i];
+    option.value = lastTen[i];
+    option.innerHTML = lastTen[i];
     gValues.appendChild(option);
-    if (i === 9) break;
   }
 }
 
@@ -403,26 +410,25 @@ function createZArrayP(p) {
   return result;
 }
 
-function createSelectorPrivateKey(thisSelect, p, limit) {
+function createSelectorPrivateKey(thisSelect, p) {
   const select = thisSelect;
   select.innerHTML = "";
-  for (let i = Math.floor(p / 2); i < p; i++) {
+
+  const startValue = Math.max(0, p - 10);
+
+  for (let i = p - 1; i > startValue; i--) {
     const option = document.createElement("option");
     option.value = i;
     option.innerHTML = i;
     select.appendChild(option);
-    if (i > limit) break;
   }
 }
 
 function generateKeys(aliceXa, bobXb) {
-  let attempts = 0;
-
   let Xa, Xb;
 
   Xa = aliceXa;
   Xb = bobXb;
-  attempts++;
 
   const Ya = mod(g, Xa, p);
   const Yb = mod(g, Xb, p);
@@ -435,17 +441,14 @@ function generateKeys(aliceXa, bobXb) {
 
   const Ka = mod(Yb, Xa, p);
   const Kb = mod(Ya, Xb, p);
-  const Kg = mod(g, Xa * Xb, p);
 
-  console.log(`\nОбщий секретный ключ:`);
-  console.log(`  Ka = ${Yb}^${Xa} mod ${p} = ${Ka}`);
-  console.log(`  Kb = ${Ya}^${Xb} mod ${p} = ${Kb}`);
-  console.log(`  K = ${g}^(${Xa}*${Xb}) mod ${p} = ${Kg}`);
+  aliceSecret.innerHTML = `K = (Y<sub>b</sub>)<sup>X<sub>a</sub></sup> mod p = ${Yb}<sup>${Xa}</sup> mod ${p} = ${Ka}`;
+  bobSecret.innerHTML = `K = (Y<sub>a</sub>)<sup>X<sub>b</sub></sup> mod p = ${Ya}<sup>${Xb}</sup> mod ${p} = ${Kb}`;
 
-  if (Ka === Kb && Ka === Kg) {
-    console.log(` Все ключи совпадают! K = ${Ka}`);
-  } else {
-    console.log(`Ключи не совпадают!`);
-    console.log(`   Ka = ${Ka}, Kb = ${Kb}, Kg = ${Kg}`);
-  }
+  const generalKey = document.getElementById("generalKey");
+
+  generalKey.innerHTML =
+    Ka === Kb
+      ? `Совместный секретный ключ: K = ${Ka}`
+      : `Не получилось получить совместный ключ, ${Ka} ≠ ${Kb}`;
 }

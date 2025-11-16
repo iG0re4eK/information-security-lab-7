@@ -69,7 +69,10 @@
               <h3>3.1) Ключи Алисы</h3>
               <div class="key-pair">
                 <div class="key-item">
-                  <label>Выбор числа X<sub>a</sub> (закрытый ключ)</label>
+                  <label
+                    >Выбор числа X<sub>a</sub> (закрытый ключ) (Приведены только
+                    последние 10 (если есть 10))</label
+                  >
                   <p>X<sub>a</sub> < p</p>
                   <span class="key-value" id="alicePrivate"
                     >X<sub>a</sub> = </span
@@ -95,7 +98,10 @@
               <h3>3.2) Ключи Боба</h3>
               <div class="key-pair">
                 <div class="key-item">
-                  <label>Выбор числа X<sub>b</sub> (закрытый ключ)</label>
+                  <label
+                    >Выбор числа X<sub>b</sub> (закрытый ключ) (Приведены только
+                    последние 10 (если есть 10))</label
+                  >
                   <p>X<sub>b</sub> < p</p>
                   <span class="key-value" id="bobPrivate">X<sub>b</sub> = </span
                   ><select
@@ -126,23 +132,19 @@
             <h3>4.1) Создание общего секретного ключа пользователем Алиса</h3>
             <div class="secret-calculation">
               <div class="calculation">
-                <label
-                  >K = (Y<sub>b</sub>)<sup>X<sub>a</sub></sup> mod p</label
-                >
-                <span class="key-value" id="aliceSecret">-</span>
+                <span class="key-value" id="aliceSecret"></span>
               </div>
             </div>
 
             <h3>4.2) Создание общего секретного ключа пользователем Боб</h3>
             <div class="secret-calculation">
               <div class="calculation">
-                <label
-                  >K = (Y<sub>a</sub>)<sup>X<sub>b</sub></sup> mod p</label
-                >
-                <span class="key-value" id="bobSecret">-</span>
+                <span class="key-value" id="bobSecret"></span>
               </div>
             </div>
           </div>
+
+          <div id="generalKey" class="general-key"></div>
         </section>
       </div>
     </main>
