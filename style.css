@@ -41,8 +41,12 @@
   }
 }
 
-.start-page-btn {
-  transform: scale(1) translateY(0.2rem);
+.start-page-btn:hover {
+  transform: scale(1.02) translateY(-0.2rem);
+}
+
+.start-page-btn:active {
+  transform: scale(0.98) translateY(-0.2rem);
 }
 
 .field-error {
@@ -68,7 +72,8 @@
 }
 
 .field-msg {
-  margin-top: 1rem;
+  position: absolute;
+  margin-top: 0.5rem;
 }
 
 body {
@@ -352,6 +357,7 @@ h4 ~ p {
   padding: 0 1rem;
   cursor: pointer;
   transition: 0.2s ease;
+  margin-top: 2rem;
 }
 
 button:hover {
@@ -436,15 +442,13 @@ main {
   }
 
   .input-section {
-    align-items: center;
-
     .next-btn {
-      margin-top: 12rem;
+      margin-top: 14rem;
     }
 
     .input-content {
       details {
-        top: 14rem;
+        top: 12rem;
         left: 50%;
         transform: translateX(-50%);
       }

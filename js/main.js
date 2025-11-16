@@ -68,6 +68,9 @@ startPageBtn.addEventListener("click", () => {
   });
   step = 0;
   updateActiveH(step);
+});
+
+pValueField.addEventListener("focus", () => {
   clearValidField();
 });
 
