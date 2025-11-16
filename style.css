@@ -352,9 +352,42 @@ main {
 
   header {
     padding: 2rem 0;
+    font-size: 0.8rem;
+  }
+
+  h2 {
+    font-size: 1rem;
+  }
+
+  h3 {
+    font-size: 0.8rem;
+  }
+
+  h4 {
+    font-size: 0.6rem;
   }
 
   main {
     padding: 2rem 0;
+  }
+
+  .next-btn {
+    margin: 0 auto;
+  }
+
+  .input-section {
+    align-items: center;
+
+    .next-btn {
+      margin-top: 10rem;
+    }
+
+    .input-content {
+      details {
+        top: 14rem;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
   }
 }
