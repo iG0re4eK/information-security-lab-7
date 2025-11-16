@@ -209,7 +209,7 @@ function validateStep(index) {
       return true;
 
     case 2:
-      calculateGeneralKeys(Ya, Xa, Yb, Xb, p);
+      calculateGeneralKeys(Yb, Xa, Ya, Xb, p);
       step = index + 1;
       return true;
 
@@ -469,7 +469,7 @@ function generateKeys(aliceXa, bobXb) {
   bobPublic.innerHTML = `Y<sub>b</sub> =  g<sup>X<sub>b</sub></sup> mod p = ${g}<sup>${Xb}</sup> mod ${p} = ${Yb}`;
 }
 
-function calculateGeneralKeys(Ya, Xa, Yb, Xb, p) {
+function calculateGeneralKeys(Yb, Xa, Ya, Xb, p) {
   const Ka = mod(Yb, Xa, p);
   const Kb = mod(Ya, Xb, p);
 
@@ -478,8 +478,7 @@ function calculateGeneralKeys(Ya, Xa, Yb, Xb, p) {
 
   const generalKey = document.getElementById("generalKey");
 
-  generalKey.innerHTML =
-    Ka === Kb
-      ? `Совместный секретный ключ: K = ${Ka}`
-      : `Не получилось получить совместный ключ, ${Ka} ≠ ${Kb}`;
+  const K = mod(g, Xa, Xb);
+
+  generalKey.innerHTML = `K = g<sup>X<sub>a</sub> × X<sub>b</sub></sup> mod p = ${g}<sup>${Xa} × ${Xb}</sup> mod ${p} = ${K}`;
 }
