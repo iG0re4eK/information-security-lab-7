@@ -201,7 +201,7 @@ function diffiChalman() {
   zArray = createZArrayP(p);
   const step2Div = document.createElement("div");
   step2Div.className = "calculation-step";
-  step2Div.innerHTML = `<h3>2.2) Множество {0, ..., p - 1}</h3>`;
+  step2Div.innerHTML = `<h3>2.2) Множество Z<sub>p</sub> = {0, ..., p - 1}</h3>`;
   step2Div.innerHTML +=
     zArray.length > 8
       ? `<p>Z<sub>${p}</sub> = {${zArray.splice(0, 5).join(", ")}, ..., ${zArray
@@ -210,10 +210,13 @@ function diffiChalman() {
       : `<p>Z<sub>${p}</sub> = {${zArray.join(", ")}}</p>`;
   infoContent.appendChild(step2Div);
 
+  phiArrayP = coprime(p);
+  phiP = phiArrayP.length;
+
   const step3Div = document.createElement("div");
   step3Div.className = "calculation-step";
-  step3Div.innerHTML = `<h3>2.3) Вычисляем p-1</h3>
-                       <p>p - 1 = ${p} - 1 = ${pMinusOne}</p>
+  step3Div.innerHTML = `<h3>2.3) Вычисляем φ(p)</h3>
+                       <p>φ(p) = p - 1 = ${p} - 1 = ${phiP}</p>
                        `;
   infoContent.appendChild(step3Div);
 
@@ -224,7 +227,7 @@ function diffiChalman() {
 
   const step4Div = document.createElement("div");
   step4Div.className = "calculation-step";
-  step4Div.innerHTML = `<h3>2.4) Факторизация ${pMinusOne} (разложение числа на простые множители)</h3>
+  step4Div.innerHTML = `<h3>2.4) Факторизация (p - 1) (разложение числа на простые множители)</h3>
                        <p>${pMinusOne} = ${factors.join(" × ")}</p>
                       `;
   infoContent.appendChild(step4Div);
@@ -233,11 +236,14 @@ function diffiChalman() {
 
   const step5Div = document.createElement("div");
   step5Div.className = "calculation-step";
-  step5Div.innerHTML = `<h3>2.5) Уникальные простые множители</h3>
+  step5Div.innerHTML = `<h3>2.5) Уникальные простые множители (p - 1)</h3>
                        <p>Уникальные множители числа ${pMinusOne} = {${pUnique.join(
     ", "
   )}}</p>`;
   infoContent.appendChild(step5Div);
+
+  phiArrayPminusOne = coprime(pMinusOne);
+  phiPminusOne = phiArrayPminusOne.length;
 
   const step6Div = document.createElement("div");
   step6Div.className = "calculation-step";
@@ -249,16 +255,10 @@ function diffiChalman() {
                        <b>Алгоритм:</b>`;
   infoContent.appendChild(step6Div);
 
-  phiArrayP = coprime(p);
-  phiArrayP = phiArrayP.length;
-
-  phiArrayPminusOne = coprime(pMinusOne);
-  phiPminusOne = phiArrayPminusOne.length;
-
   const step6DivStep1 = document.createElement("div");
   step6DivStep1.className = "calculation-step";
   step6DivStep1.innerHTML = `<h4>1. Вычисление функции Эйлера φ(p - 1):</h4>
-                       <p>Определяет количество натуральных чисел, меньших чисел, меньших p - 1 и взаимо простых с ним.</p>
+                       <p>Определяет количество натуральных чисел, меньших (p - 1) и взаимо простых с ним.</p>
                        <p>Количество φ(p - 1) = ${phiPminusOne}</p>`;
   step6DivStep1.innerHTML +=
     phiArrayPminusOne.length > 8
@@ -277,11 +277,11 @@ function diffiChalman() {
   const step6DivStep3 = document.createElement("div");
   step6DivStep3.className = "calculation-step";
   step6DivStep3.innerHTML = `<h4>3. Проверка на примитивность:</h4>
-                       <p>Возводим a в степени d, где d - делитель φ(p-1)</p>
+                       <p>Возводим a в степени d, где d - (p-1)/q для каждого простого делителя q числа (p-1)</p>
                        <p>Если ни для одного делителя d: a<sup>d</sup> ≠ 1 (mod p), то a - примитивный элемент</p>`;
   infoContent.appendChild(step6DivStep3);
 
-  validNumberG = checkValidNumberG(p, pMinusOne, pUnique);
+  validNumberG = checkValidNumberG(pMinusOne, pUnique);
 
   const step7Div = document.createElement("div");
   step7Div.className = "calculation-step";
@@ -332,10 +332,10 @@ function coprime(n) {
   return result;
 }
 
-function checkValidNumberG(p, pMinusOne, uniqueFactors) {
+function checkValidNumberG(pMinusOne, uniqueFactors) {
   const roots = [];
 
-  for (let g = 2; g < p; g++) {
+  for (let g = 2; g <= pMinusOne; g++) {
     let isPrimitiveRoot = true;
 
     for (const q of uniqueFactors) {
