@@ -66,6 +66,9 @@ startPageBtn.addEventListener("click", () => {
     top: 0,
     behavior: "smooth",
   });
+  step = 0;
+  updateActiveH(step);
+  clearValidField();
 });
 
 function updateActiveH(step) {
@@ -162,6 +165,17 @@ nextBtns.forEach((btn, index) => {
   });
 });
 
+function clearValidField() {
+  const fieldMsg = pValueField.parentElement.querySelector(".field-msg");
+  pValueField.classList.remove("field-valid", "field-error");
+  fieldMsg.classList.remove("valid-msg", "error-msg");
+  fieldMsg.textContent = "";
+}
+
+pValueField.addEventListener("input", () => {
+  clearValidField();
+});
+
 function validateStep(index) {
   switch (index) {
     case 0:
@@ -198,7 +212,7 @@ function validateStep(index) {
 }
 
 generateBtn.addEventListener("click", () => {
-  console.clear();
+  clearValidField();
 
   pValueField.classList.remove("field-error");
   robinMillerAlg.setBit(Number(bitValue.value));
