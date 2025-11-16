@@ -77,12 +77,16 @@
                     name="alicePrivateSelect"
                     id="alicePrivateSelect"
                     class="select-private"
-                  ></select>
+                  >
+                    <option value="" disabled selected>Укажите p</option>
+                  </select>
                 </div>
                 <div class="key-item">
                   <label>Вычисление числа Y<sub>a</sub> (открытй ключ)</label>
                   <br />
-                  <span class="key-value" id="alicePublic"></span>
+                  <span class="key-value" id="alicePublic"
+                    >Y<sub>a</sub> = g<sup>X<sub>a</sub></sup> mod p</span
+                  >
                 </div>
               </div>
             </div>
@@ -98,12 +102,16 @@
                     name="bobPrivateSelect"
                     id="bobPrivateSelect"
                     class="select-private"
-                  ></select>
+                  >
+                    <option value="" disabled selected>Укажите p</option>
+                  </select>
                 </div>
                 <div class="key-item">
                   <label>Вычисление числа Y<sub>b</sub> (открытй ключ)</label>
                   <br />
-                  <span class="key-value" id="bobPublic">Y<sub>b</sub> = </span>
+                  <span class="key-value" id="bobPublic"
+                    >Y<sub>b</sub> = g<sup>X<sub>b</sub></sup> mod p
+                  </span>
                 </div>
               </div>
             </div>

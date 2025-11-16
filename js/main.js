@@ -405,7 +405,7 @@ function createZArrayP(p) {
 
 function createSelectorPrivateKey(thisSelect, p, limit) {
   const select = thisSelect;
-
+  select.innerHTML = "";
   for (let i = Math.floor(p / 2); i < p; i++) {
     const option = document.createElement("option");
     option.value = i;
