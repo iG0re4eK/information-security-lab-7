@@ -325,7 +325,7 @@ function diffiChalman() {
   const step6DivStep3 = document.createElement("div");
   step6DivStep3.className = "calculation-step";
   step6DivStep3.innerHTML = `<h4>3. Проверка на примитивность:</h4>
-                       <p>Возводим a в степени d, где d — (p-1)/q для каждого простого делителя q числа (p-1)</p>
+                       <p>Возводим a в степени d, где d — делитель φ(p-1)</p>
                        <p>Если ни для одного делителя d: a<sup>d</sup> ≠ 1 (mod p), то a — примитивный элемент</p>`;
   infoContent.appendChild(step6DivStep3);
 
@@ -400,8 +400,7 @@ function checkValidNumberG(pMinusOne, uniqueFactors) {
   for (let g = 2; g <= pMinusOne; g++) {
     let isPrimitiveRoot = true;
 
-    for (const q of uniqueFactors) {
-      const d = pMinusOne / q;
+    for (const d of uniqueFactors) {
       const result = mod(g, d, p);
 
       if (result === 1) {
@@ -478,7 +477,7 @@ function calculateGeneralKeys(Yb, Xa, Ya, Xb, p) {
 
   const generalKey = document.getElementById("generalKey");
 
-  const K = mod(g, Xa, Xb);
+  const K = mod(g, Xa * Xb, p);
 
   generalKey.innerHTML = `K = g<sup>X<sub>a</sub> × X<sub>b</sub></sup> mod p = ${g}<sup>${Xa} × ${Xb}</sup> mod ${p} = ${K}`;
 }
