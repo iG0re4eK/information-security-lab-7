@@ -6,6 +6,8 @@ const bitValue = document.getElementById("bitValue");
 const generateBtn = document.getElementById("generateBtn");
 const infoContent = document.getElementById("infoContent");
 
+const startPageBtn = document.getElementById("startPageBtn");
+
 const alicePrivateSelect = document.getElementById("alicePrivateSelect");
 const bobPrivateSelect = document.getElementById("bobPrivateSelect");
 
@@ -58,6 +60,13 @@ function createBitValueOptions(min, max) {
   }
   bitValue.value = max - 1;
 }
+
+startPageBtn.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+});
 
 function updateActiveH(step) {
   const headersTwo = document.querySelectorAll("section h2");
