@@ -26,6 +26,10 @@ let zArray = [];
 let pUnique = [];
 let validNumberG = [];
 let g = null;
+let Xa = null;
+let Xb = null;
+let Ya = null;
+let Yb = null;
 
 const robinMillerAlg = new RobinMillerAlg();
 const fermaFactorizationAlg = new FermaFactorization();
@@ -205,6 +209,7 @@ function validateStep(index) {
       return true;
 
     case 2:
+      calculateGeneralKeys(Ya, Xa, Yb, Xb, p);
       step = index + 1;
       return true;
 
@@ -451,20 +456,20 @@ function createSelectorPrivateKey(thisSelect, p) {
 }
 
 function generateKeys(aliceXa, bobXb) {
-  let Xa, Xb;
-
   Xa = aliceXa;
   Xb = bobXb;
 
-  const Ya = mod(g, Xa, p);
-  const Yb = mod(g, Xb, p);
+  Ya = mod(g, Xa, p);
+  Yb = mod(g, Xb, p);
 
   const alicePublic = document.getElementById("alicePublic");
   const bobPublic = document.getElementById("bobPublic");
 
   alicePublic.innerHTML = `Y<sub>a</sub> =  g<sup>X<sub>a</sub></sup> mod p = ${g}<sup>${Xa}</sup> mod ${p} = ${Ya}`;
   bobPublic.innerHTML = `Y<sub>b</sub> =  g<sup>X<sub>b</sub></sup> mod p = ${g}<sup>${Xb}</sup> mod ${p} = ${Yb}`;
+}
 
+function calculateGeneralKeys(Ya, Xa, Yb, Xb, p) {
   const Ka = mod(Yb, Xa, p);
   const Kb = mod(Ya, Xb, p);
 
