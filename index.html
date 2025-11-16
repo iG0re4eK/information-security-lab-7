@@ -71,14 +71,18 @@
                 <div class="key-item">
                   <label>Выбор числа X<sub>a</sub> (закрытый ключ)</label>
                   <p>X<sub>a</sub> < p</p>
-                  <span class="key-value" id="alicePrivate">-</span>
+                  <span class="key-value" id="alicePrivate"
+                    >X<sub>a</sub> = </span
+                  ><select
+                    name="alicePrivateSelect"
+                    id="alicePrivateSelect"
+                    class="select-private"
+                  ></select>
                 </div>
                 <div class="key-item">
                   <label>Вычисление числа Y<sub>a</sub> (открытй ключ)</label>
-                  <p>
-                    Y<sub>a</sub> = g<sup>X<sub>a</sub></sup> mod p
-                  </p>
-                  <span class="key-value" id="alicePublic">-</span>
+                  <br />
+                  <span class="key-value" id="alicePublic"></span>
                 </div>
               </div>
             </div>
@@ -89,21 +93,23 @@
                 <div class="key-item">
                   <label>Выбор числа X<sub>b</sub> (закрытый ключ)</label>
                   <p>X<sub>b</sub> < p</p>
-                  <span class="key-value" id="bobPrivate">-</span>
+                  <span class="key-value" id="bobPrivate">X<sub>b</sub> = </span
+                  ><select
+                    name="bobPrivateSelect"
+                    id="bobPrivateSelect"
+                    class="select-private"
+                  ></select>
                 </div>
                 <div class="key-item">
                   <label>Вычисление числа Y<sub>b</sub> (открытй ключ)</label>
-                  <p>
-                    Y<sub>b</sub> = g<sup>X<sub>b</sub></sup> mod p
-                  </p>
-                  <span class="key-value" id="bobPublic">-</span>
+                  <br />
+                  <span class="key-value" id="bobPublic">Y<sub>b</sub> = </span>
                 </div>
               </div>
             </div>
           </div>
 
-          <button class="generate-keys-btn">Сгенерировать ключи</button
-          ><button class="next-btn">Дальше</button>
+          <button class="next-btn">Дальше</button>
         </section>
 
         <section>

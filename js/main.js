@@ -6,6 +6,9 @@ const bitValue = document.getElementById("bitValue");
 const generateBtn = document.getElementById("generateBtn");
 const infoContent = document.getElementById("infoContent");
 
+const alicePrivateSelect = document.getElementById("alicePrivateSelect");
+const bobPrivateSelect = document.getElementById("bobPrivateSelect");
+
 const nextBtns = document.querySelectorAll(".next-btn");
 
 let step = 0;
@@ -156,12 +159,23 @@ function validateStep(index) {
       } else {
         diffiChalman();
         step = index + 1;
+
+        createSelectorPrivateKey(alicePrivateSelect, p, 25);
+        createSelectorPrivateKey(bobPrivateSelect, p, 25);
+
         return true;
       }
 
     case 1:
       g = parseInt(document.getElementById("gValues").value);
-      generateKeys();
+      generateKeys(
+        Number(alicePrivateSelect.value),
+        Number(bobPrivateSelect.value)
+      );
+      step = index + 1;
+      return true;
+
+    case 2:
       step = index + 1;
       return true;
 
@@ -313,6 +327,20 @@ function diffiChalman() {
   createSelectG(validNumberG);
 }
 
+alicePrivateSelect.addEventListener("change", () => {
+  generateKeys(
+    Number(alicePrivateSelect.value),
+    Number(bobPrivateSelect.value)
+  );
+});
+
+bobPrivateSelect.addEventListener("change", () => {
+  generateKeys(
+    Number(alicePrivateSelect.value),
+    Number(bobPrivateSelect.value)
+  );
+});
+
 function gcd(a, b) {
   while (b !== 0) {
     let temp = b;
@@ -375,32 +403,35 @@ function createZArrayP(p) {
   return result;
 }
 
-function generateKeys() {
-  let Xa, Xb;
+function createSelectorPrivateKey(thisSelect, p, limit) {
+  const select = thisSelect;
+
+  for (let i = Math.floor(p / 2); i < p; i++) {
+    const option = document.createElement("option");
+    option.value = i;
+    option.innerHTML = i;
+    select.appendChild(option);
+    if (i > limit) break;
+  }
+}
+
+function generateKeys(aliceXa, bobXb) {
   let attempts = 0;
 
-  do {
-    Xa =
-      phiArrayPminusOne[Math.floor(Math.random() * phiArrayPminusOne.length)];
-    Xb =
-      phiArrayPminusOne[Math.floor(Math.random() * phiArrayPminusOne.length)];
-    attempts++;
+  let Xa, Xb;
 
-    if (attempts > 20) {
-      Xa = 5;
-      Xb = 7;
-      break;
-    }
-  } while (Xa === Xb || Xa === g || Xb === g);
-
-  console.log(`Секретные ключи: Xa = ${Xa}, Xb = ${Xb}`);
+  Xa = aliceXa;
+  Xb = bobXb;
+  attempts++;
 
   const Ya = mod(g, Xa, p);
   const Yb = mod(g, Xb, p);
 
-  console.log(`Открытые ключи:`);
-  console.log(`  Ya = ${g}^${Xa} mod ${p} = ${Ya}`);
-  console.log(`  Yb = ${g}^${Xb} mod ${p} = ${Yb}`);
+  const alicePublic = document.getElementById("alicePublic");
+  const bobPublic = document.getElementById("bobPublic");
+
+  alicePublic.innerHTML = `Y<sub>a</sub> =  g<sup>X<sub>a</sub></sup> mod p = ${g}<sup>${Xa}</sup> mod ${p} = ${Ya}`;
+  bobPublic.innerHTML = `Y<sub>b</sub> =  g<sup>X<sub>b</sub></sup> mod p = ${g}<sup>${Xb}</sup> mod ${p} = ${Yb}`;
 
   const Ka = mod(Yb, Xa, p);
   const Kb = mod(Ya, Xb, p);

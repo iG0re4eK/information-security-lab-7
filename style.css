@@ -45,13 +45,16 @@
 
 body {
   background-color: rgb(20, 20, 20);
-  line-height: 1.5rem;
 }
 
 .wrapper {
   margin: 0 auto;
   padding: 0.5em;
   max-width: 1200px;
+}
+
+p {
+  line-height: 1.5rem;
 }
 
 section {
@@ -87,7 +90,15 @@ section:last-child {
 
   select {
     padding: 0.5rem;
+    width: 8rem;
   }
+}
+
+.select-private {
+  padding-left: 1rem;
+  margin: 1rem 0;
+  margin-left: 0.4rem;
+  width: 8rem;
 }
 
 header {
