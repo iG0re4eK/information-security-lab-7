@@ -332,8 +332,7 @@ function diffiChalman() {
 
   validNumberG = checkValidNumberG(pMinusOne, pUnique);
 
-  const primitiveCount = validNumberG.length;
-  const primitiveProbability = (primitiveCount / pMinusOne).toFixed(6);
+  const primitiveProbability = (phiPminusOne / pMinusOne).toFixed(6);
   t = findSuitableT(pMinusOne, validNumberG);
 
   const step7Div = document.createElement("div");
@@ -346,7 +345,7 @@ function diffiChalman() {
           .slice(-3)
           .join(", ")}}</p>`
       : `<p>g = {${validNumberG.join(", ")}}</p>`;
-  step7Div.innerHTML += `<p>Вероятность того, что случайное число является примитивным корнем: ${primitiveCount}/${pMinusOne} = ${primitiveProbability}</p>
+  step7Div.innerHTML += `<p>Вероятность того, что случайное число является примитивным корнем: ${phiPminusOne}/${pMinusOne} = ${primitiveProbability}</p>
                        <p>Параметр t (взаимно простой с p-1): ${t}</p>`;
   infoContent.appendChild(step7Div);
 
