@@ -334,7 +334,6 @@ function diffiChalman() {
 
   const primitiveCount = validNumberG.length;
   const primitiveProbability = (primitiveCount / pMinusOne).toFixed(6);
-  const errorProbability = Math.pow(1 / 4, 5).toFixed(8);
   t = findSuitableT(pMinusOne, validNumberG);
 
   const step7Div = document.createElement("div");
@@ -348,8 +347,7 @@ function diffiChalman() {
           .join(", ")}}</p>`
       : `<p>g = {${validNumberG.join(", ")}}</p>`;
   step7Div.innerHTML += `<p>Вероятность того, что случайное число является примитивным корнем: ${primitiveCount}/${pMinusOne} = ${primitiveProbability}</p>
-                       <p>Параметр t (взаимно простой с p-1): ${t}</p>
-                       <p>Вероятность ошибки теста Миллера-Рабина (5 раундов): ${errorProbability}</p>`;
+                       <p>Параметр t (взаимно простой с p-1): ${t}</p>`;
   infoContent.appendChild(step7Div);
 
   const step8Div = document.createElement("div");
