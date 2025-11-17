@@ -25,6 +25,7 @@ let phiArrayPminusOne = [];
 let zArray = [];
 let pUnique = [];
 let validNumberG = [];
+let t = null;
 let g = null;
 let Xa = null;
 let Xb = null;
@@ -331,6 +332,11 @@ function diffiChalman() {
 
   validNumberG = checkValidNumberG(pMinusOne, pUnique);
 
+  const primitiveCount = validNumberG.length;
+  const primitiveProbability = (primitiveCount / pMinusOne).toFixed(6);
+  const errorProbability = Math.pow(1 / 4, 5).toFixed(8);
+  t = findSuitableT(pMinusOne, validNumberG);
+
   const step7Div = document.createElement("div");
   step7Div.className = "calculation-step";
   step7Div.innerHTML = `<h3>2.7) Найденные примитивные корни</h3>`;
@@ -341,6 +347,9 @@ function diffiChalman() {
           .slice(-3)
           .join(", ")}}</p>`
       : `<p>g = {${validNumberG.join(", ")}}</p>`;
+  step7Div.innerHTML += `<p>Вероятность того, что случайное число является примитивным корнем: ${primitiveCount}/${pMinusOne} = ${primitiveProbability}</p>
+                       <p>Параметр t (взаимно простой с p-1): ${t}</p>
+                       <p>Вероятность ошибки теста Миллера-Рабина (5 раундов): ${errorProbability}</p>`;
   infoContent.appendChild(step7Div);
 
   const step8Div = document.createElement("div");
@@ -359,6 +368,22 @@ function diffiChalman() {
   infoContent.appendChild(step8Div);
 
   createSelectG(validNumberG);
+}
+
+function findSuitableT(pMinusOne, candidateArray) {
+  const candidates = [...candidateArray];
+  for (let i = candidates.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
+  }
+
+  for (const candidate of candidates) {
+    if (gcd(candidate, pMinusOne) === 1) {
+      return candidate;
+    }
+  }
+
+  return 1;
 }
 
 alicePrivateSelect.addEventListener("change", () => {
